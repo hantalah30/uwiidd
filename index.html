@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Sweetest Sayang! 🍭🦄</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #fff0f6, #a3d7ff, #ffd1f6);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Comic Sans MS', 'Arial', sans-serif;
+      position: relative;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .heart {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: #ff6b6b;
+      transform: rotate(-45deg);
+      animation: float 3s infinite;
+      opacity: 0.9;
+      box-shadow: 0 0 12px rgba(255, 107, 107, 0.6);
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      background: inherit;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .heart::before {
+      top: -20px;
+      left: 0;
+    }
+    .heart::after {
+      left: 20px;
+      top: 0;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(-45deg) scale(1); opacity: 0.9; }
+      50% { transform: translateY(-80vh) rotate(-45deg) scale(1.5); opacity: 0.7; }
+      100% { transform: translateY(-100vh) rotate(-45deg) scale(0.5); opacity: 0; }
+    }
+    #message {
+      display: none;
+      font-size: 3.5rem;
+      color: #ff1493;
+      text-shadow: 0 0 12px #ff1493, 0 0 24px #ff85a2, 0 0 36px #ffb6c1;
+      animation: bounceWobble 2s infinite;
+    }
+    @keyframes bounceWobble {
+      0% { transform: translateY(0) scale(1); }
+      25% { transform: translateY(-30px) scale(1.2) rotate(5deg); }
+      50% { transform: translateY(0) scale(1); }
+      75% { transform: translateY(-20px) scale(1.1) rotate(-5deg); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .button {
+      background: linear-gradient(45deg, #ff85a2, #ff4d6d, #ffd1f6);
+      color: white;
+      padding: 1.8rem 4rem;
+      border-radius: 50px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .button:hover {
+      transform: scale(1.3) rotate(12deg);
+      box-shadow: 0 15px 35px rgba(255, 77, 109, 0.6);
+    }
+    .characters {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 120px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 120"><g transform="translate(20,0)"><circle cx="40" cy="30" r="25" fill="#8b5523"/><circle cx="25" cy="20" r="6" fill="#fff"/><circle cx="55" cy="20" r="6" fill="#fff"/><circle cx="40" cy="35" r="4" fill="#000"/><circle cx="40" cy="70" r="30" fill="#8b5523"/><rect x="30" y="90" width="20" height="15" fill="#ff85a2"/></g><g transform="translate(100,0)"><path d="M40,20 a15,15 0 0,1 30,0 h15 v15 h-15 v15 h-15 v-15 h-15 v-15 h15 z" fill="#ffb6c1"/><circle cx="50" cy="15" r="4" fill="#fff"/><circle cx="65" cy="15" r="4" fill="#fff"/><circle cx="57.5" cy="20" r="3" fill="#000"/><path d="M45,35 h25 v25 h-25 z" fill="#a3d7ff"/><path d="M57.5,10 l5,-10 l5,10" fill="#ffd700"/></g></svg>');
+      animation: superDance 1.5s infinite;
+    }
+    @keyframes superDance {
+      0% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+      25% { transform: translateX(-65%) translateY(-30px) rotate(12deg); }
+      50% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+      75% { transform: translateX(-35%) translateY(-30px) rotate(-12deg); }
+      100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+    }
+    .background-decoration {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="6" fill="%23ffb6c1"/><circle cx="90" cy="90" r="6" fill="%23a3d7ff"/><path d="M50,15 a25,25 0 0,1 0,50 a25,25 0 0,1 0,-50" fill="none" stroke="%23ff85a2" stroke-width="3"/><path d="M15,85 a12,12 0 0,1 24,0" fill="none" stroke="%23ffd1f6" stroke-width="2"/><circle cx="30" cy="70" r="4" fill="%23fff0f6"/></svg>') repeat;
+      opacity: 0.25;
+    }
+    .carousel {
+      display: none;
+      position: absolute;
+      top: 20%;
+      width: 80%;
+      max-width: 600px;
+      overflow: hidden;
+    }
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .carousel-item {
+      flex: 0 0 33.33%;
+      padding: 10px;
+    }
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 1;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,20 a30,30 0 0,1 0,60 a30,30 0 0,1 0,-60" fill="%23ff85a2" stroke="%23ffd1f6" stroke-width="5"/><text x="50" y="55" font-size="20" fill="%23fff" text-anchor="middle" font-family="Comic Sans MS">Your Photo</text></svg>');
+      background-size: cover;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      animation: photoWobble 3s infinite;
+    }
+    @keyframes photoWobble {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-decoration"></div>
+  <canvas id="sparkleCanvas"></canvas>
+  <div class="text-center z-10">
+    <h1 class="text-5xl md:text-8xl font-bold text-pink-600 mb-14 drop-shadow-lg">To My Sweetest Sayang! 🍬💖</h1>
+    <button id="revealButton" class="button">Boop for a Candy Surprise! 🌟</button>
+    <p id="message" class="mt-14">lopppyuuu sayanggg 😍🍭</p>
+  </div>
+  <div class="carousel" id="carousel">
+    <div class="carousel-inner" id="carouselInner">
+      <div class="carousel-item"><div class="photo-frame"></div></div>
+      <div class="carousel-item"><div class="photo-frame"></div></div>
+      <div class="carousel-item"><div class="photo-frame"></div></div>
+      <div class="carousel-item"><div class="photo-frame"></div></div>
+    </div>
+  </div>
+  <div class="characters"></div>
+
+  <script>
+    const jsConfetti = new JSConfetti();
+    const canvas = document.getElementById('sparkleCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const sparkles = [];
+    class Sparkle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 6 + 3;
+        this.speedY = Math.random() * -2.5 - 1.5;
+        this.color = ['#ffd700', '#ff85a2', '#a3d7ff', '#ffd1f6'][Math.floor(Math.random() * 4)];
+      }
+      update() {
+        this.y += this.speedY;
+        if (this.y < 0) this.y = canvas.height;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    function initSparkles() {
+      for (let i = 0; i < 60; i++) {
+        sparkles.push(new Sparkle());
+      }
+    }
+
+    function animateSparkles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      sparkles.forEach(sparkle => {
+        sparkle.update();
+        sparkle.draw();
+      });
+      requestAnimationFrame(animateSparkles);
+    }
+
+    initSparkles();
+    animateSparkles();
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.background = ['#ff6b6b', '#ff85a2', '#ffb6c1', '#a3d7ff', '#ffd1f6'][Math.floor(Math.random() * 5)];
+      heart.style.animationDuration = Math.random() * 1.2 + 1.8 + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 3000);
+    }
+
+    setInterval(createHeart, 80);
+
+    let currentIndex = 0;
+    const carouselInner = document.getElementById('carouselInner');
+    const totalItems = document.querySelectorAll('.carousel-item').length;
+
+    function moveCarousel() {
+      carouselInner.style.transform = `translateX(-${currentIndex * 33.33}%)`;
+      currentIndex = (currentIndex + 1) % totalItems;
+    }
+
+    document.getElementById('revealButton').addEventListener('click', () => {
+      const message = document.getElementById('message');
+      const carousel = document.getElementById('carousel');
+      message.style.display = 'block';
+      carousel.style.display = 'flex';
+      document.getElementById('revealButton').style.display = 'none';
+      jsConfetti.addConfetti({
+        emojis: ['💖', '😍', '🦄', '🌈', '🐻', '🌟', '🍬', '🎀'],
+        emojiSize: 70,
+        confettiNumber: 120,
+        confettiColors: ['#ff6b6b', '#ff85a2', '#ffb6c1', '#a3d7ff', '#ffd1f6', '#ffd700'],
+      });
+      setInterval(moveCarousel, 2000);
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
